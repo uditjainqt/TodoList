@@ -20,8 +20,7 @@ const uri = "mongodb+srv://uj:wWbGuJwMi9y2cEn7@ujlist.w3ae9tm.mongodb.net/todoli
 mongoose.connect(uri)
 
 app.get("/", function (req, res) {
-    res.send("Hello world!");
-    //res.redirect("/general");
+    res.redirect("/general");
 });
 
 app.post("/category", function (req, res) {
@@ -31,34 +30,49 @@ app.post("/category", function (req, res) {
 app.post("/delete", async function (req, res) {
     const id = req.body.checkbox;
     if (id) {
-        await Item.deleteOne({ _id: id });
+        try {
+            await Item.deleteOne({ _id: id });
+        } catch (err) {
+            console.log(err);
+        }
         res.redirect('back');
     }
 });
 
 app.get("/:category", async function (req, res) {
-    const category = req.params.category;
-    const items = await Item.find({category: category});
-    res.render("list", { items: items, category: _.capitalize(category) });
+    try{
+        const category = req.params.category;
+        const items = await Item.find({category: category});
+        res.render("list", { items: items, category: _.capitalize(category) });
+    } catch (err) {
+        console.log(err);
+    }
 });
 
 app.post("/:category", async function (req, res) {
     let category = req.body.category.toLowerCase();
     if (req.body.newTodo != "") {
-        await Item.create({
-            name: req.body.newTodo,
-            category: category,
-            completed: false
-        })
+        try{
+            await Item.create({
+                name: req.body.newTodo,
+                category: category,
+                completed: false
+            });
+        } catch (err) {
+            console.log(err);
+        }
         res.redirect("/" + category);
     }
 });
 
 app.get("/categories/list", async function (req, res) {
-
-    Item.collection.distinct("category", function (error, results) {
-        console.log(results);
-    });
+    try{
+        Item.collection.distinct("category", function (error, results) {
+            console.log(results);
+        });
+    } catch (err) {
+        console.log(err);
+    }
 
     res.send("done");
 });
