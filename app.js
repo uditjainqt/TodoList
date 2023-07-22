@@ -20,7 +20,12 @@ const uri = "mongodb+srv://uj:wWbGuJwMi9y2cEn7@ujlist.w3ae9tm.mongodb.net/todoli
 connect();
 
 async function connect() {
-    await mongoose.connect(uri)
+    await mongoose.connect(uri).then(function () {
+        console.log("Database connection successful");
+    }).catch(function (err) {
+        console.log("Error connecting to database");
+        console.log(err);
+    });
 }
 
 app.get("/", function (req, res) {
