@@ -1,0 +1,30 @@
+<%- include('header'); -%>
+
+<div class="box" id="heading">
+  <h1><%= category %></h1>
+</div>
+
+<div class="box">
+  <form class="item" method="post">
+    <input
+      type="text"
+      name="newTodo"
+      placeholder="New Item"
+      autocomplete="off"
+    />
+    <button id="create-item-btn" type="submit" name="category" value="<%= category %>">+</button>
+  </form>
+  <div class="main-container">
+    <% for (var i = items.length - 1; i >= 0; i--) { %>
+      <form action="/delete" method="post">
+        <div class="item">
+          </form>
+          <input type="checkbox" name="checkbox" value="<%= items[i]._id %>" onchange="this.form.submit()" />
+          <p><%= items[i].name %></p>
+        </div>
+      </form>
+    <% } %>
+  </div>
+</div>
+
+<%- include('footer'); -%>
