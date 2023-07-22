@@ -17,7 +17,11 @@ const items = [];
 
 
 const uri = "mongodb+srv://uj:wWbGuJwMi9y2cEn7@ujlist.w3ae9tm.mongodb.net/todolistDB?retryWrites=true&w=majority";
-mongoose.connect(uri)
+connect();
+
+async function connect() {
+    await mongoose.connect(uri)
+}
 
 app.get("/", function (req, res) {
     res.redirect("/general");
