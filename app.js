@@ -19,9 +19,14 @@ const items = [];
 const uri = "mongodb+srv://uj:wWbGuJwMi9y2cEn7@ujlist.w3ae9tm.mongodb.net/todolistDB?retryWrites=true&w=majority";
 mongoose.connect(uri)
 
+app.get("/", function (req, res) {
+    res.send("Hello world!");
+    //res.redirect("/general");
+});
+
 app.post("/category", function (req, res) {
     res.redirect("/" + req.body.categoryName.toLowerCase());
-})
+});
 
 app.post("/delete", async function (req, res) {
     const id = req.body.checkbox;
@@ -29,11 +34,7 @@ app.post("/delete", async function (req, res) {
         await Item.deleteOne({ _id: id });
         res.redirect('back');
     }
-})
-
-app.get("/", function (req, res) {
-    res.redirect("/general");
-})
+});
 
 app.get("/:category", async function (req, res) {
     const category = req.params.category;
@@ -55,12 +56,12 @@ app.post("/:category", async function (req, res) {
 
 app.get("/categories/list", async function (req, res) {
 
-    Item.collection.distinct("category", function(error, results){
+    Item.collection.distinct("category", function (error, results) {
         console.log(results);
-      });
+    });
 
     res.send("done");
-})
+});
 
 app.listen(port, function () {
     console.log("Server is running");
