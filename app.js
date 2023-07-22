@@ -20,22 +20,30 @@ const uri = "mongodb+srv://uj:wWbGuJwMi9y2cEn7@ujlist.w3ae9tm.mongodb.net/todoli
 mongoose.connect(uri)
 
 app.get("/", function (req, res) {
-    res.redirect("/general");
+    try {
+        res.redirect("/general");
+    } catch (err) {
+        console.log(err);
+    }
 });
 
 app.post("/category", function (req, res) {
-    res.redirect("/" + req.body.categoryName.toLowerCase());
+    try {
+        res.redirect("/" + req.body.categoryName.toLowerCase());
+    } catch (err) {
+        console.log(err);
+    }
 });
 
 app.post("/delete", async function (req, res) {
-    const id = req.body.checkbox;
-    if (id) {
-        try {
+    try {
+        const id = req.body.checkbox;
+        if (id) {
             await Item.deleteOne({ _id: id });
-        } catch (err) {
-            console.log(err);
+            res.redirect('back');
         }
-        res.redirect('back');
+    } catch (err) {
+        console.log(err);
     }
 });
 
@@ -50,19 +58,19 @@ app.get("/:category", async function (req, res) {
 });
 
 app.post("/:category", async function (req, res) {
-    let category = req.body.category.toLowerCase();
-    if (req.body.newTodo != "") {
-        try{
+    try {
+        let category = req.body.category.toLowerCase();
+        if (req.body.newTodo != "") {
             await Item.create({
                 name: req.body.newTodo,
                 category: category,
                 completed: false
             });
-        } catch (err) {
-            console.log(err);
+            res.redirect("/" + category);
         }
-        res.redirect("/" + category);
-    }
+    } catch (err) {
+        console.log(err);
+    } 
 });
 
 app.get("/categories/list", async function (req, res) {
@@ -70,11 +78,10 @@ app.get("/categories/list", async function (req, res) {
         Item.collection.distinct("category", function (error, results) {
             console.log(results);
         });
+        res.send("done");
     } catch (err) {
         console.log(err);
     }
-
-    res.send("done");
 });
 
 app.listen(port, function () {
