@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 var _ = require('lodash');
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const port = process.env.PORT || 3000;
 
 const Item = require(__dirname + "/models/itemModel");
 const date = require(__dirname + "/date")
@@ -12,7 +13,6 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
-const port = 3000;
 const items = [];
 
 
@@ -63,33 +63,6 @@ app.get("/categories/list", async function (req, res) {
 })
 
 app.listen(port, function () {
-    console.log("Server is running on port " + port);
+    console.log("Server is running");
 });
-
-
-
-
-
-
-// app.get("/", function (req, res) {
-//     res.render("list", { listTitle: date.getDate(), items: items, category: "items" });
-// });
-
-// app.get("/work", function (req, res) {
-//     res.render("list", { listTitle: "Work ToDo List", items: workItems, category: "work" });
-// })
-
-// app.post("/", function (req, res) {
-//     let category = req.body.category;
-//     if (req.body.newTodo != "") {
-//         if (category === "work") {
-//             workItems.push(req.body.newTodo);
-//             res.redirect("/work");
-//         } else {
-//             items.push(req.body.newTodo);
-//             res.redirect("/");
-//         }
-//     }
-// });
-
 
