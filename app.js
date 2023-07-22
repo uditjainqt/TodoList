@@ -42,10 +42,10 @@ app.post("/delete", async function (req, res) {
 app.get("/:category", async function (req, res) {
     const category = req.params.category;
     await Item.find({ category: category }).then(function (items) {
-        console.log("Items found: " + items);
         res.render("list", { items: items, category: _.capitalize(category) });
-    }).catch(function () {
+    }).catch(function (err) {
         console.log("Error trying to find items for category: " + category);
+        console.log(err);
         res.redirect("/");
     });
 });
